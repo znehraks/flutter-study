@@ -12,20 +12,24 @@ class App extends StatefulWidget {
 }
 
 class _AppState extends State<App> {
-  List<int> numbers = [];
-  void onAdd() {
-    setState(() {
-      numbers.add(numbers.length);
-    });
-  }
+  bool showTitle = true;
 
-  void onSubtract() {
-    setState(() {});
+  void toggle() {
+    setState(() {
+      showTitle = !showTitle;
+    });
   }
 
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      theme: ThemeData(
+        textTheme: const TextTheme(
+          titleLarge: TextStyle(
+            color: Colors.blueGrey,
+          ),
+        ),
+      ),
       home: Scaffold(
         backgroundColor: const Color(0xFFF3eDDB),
         body: Center(
@@ -33,42 +37,52 @@ class _AppState extends State<App> {
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
-              const Text(
-                'Click Count',
-                style: TextStyle(
-                  fontSize: 30,
+              showTitle ? const MyLargeTitle() : const Text('Nothing'),
+              IconButton(
+                onPressed: toggle,
+                icon: const Icon(
+                  Icons.remove_red_eye,
                 ),
-              ),
-              for (var n in numbers)
-                Text(
-                  '$n',
-                  style: const TextStyle(
-                    fontSize: 30,
-                  ),
-                ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: onAdd,
-                    icon: const Icon(
-                      Icons.add_box_rounded,
-                    ),
-                  ),
-                  IconButton(
-                    iconSize: 40,
-                    onPressed: onSubtract,
-                    icon: const Icon(
-                      Icons.minimize_outlined,
-                    ),
-                  ),
-                ],
               )
             ],
           ),
         ),
+      ),
+    );
+  }
+}
+
+class MyLargeTitle extends StatefulWidget {
+  const MyLargeTitle({
+    super.key,
+  });
+
+  @override
+  State<MyLargeTitle> createState() => _MyLargeTitleState();
+}
+
+class _MyLargeTitleState extends State<MyLargeTitle> {
+  int count = 0;
+  @override
+  void initState() {
+    super.initState();
+    print('initState!!');
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    print("dispose");
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    print('build!!');
+    return Text(
+      'My Large Title',
+      style: TextStyle(
+        fontSize: 30,
+        color: Theme.of(context).textTheme.titleLarge?.color,
       ),
     );
   }
